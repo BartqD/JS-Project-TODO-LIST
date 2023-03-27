@@ -175,6 +175,10 @@ h1 {
     background-color: var(--light-dark);
     border-radius: 5px;
 }
+.show-popup
+{
+    display: flex;
+}
 
 .popup h3 {
     padding: 20px;
