@@ -1,9 +1,9 @@
-let todoInput //miejsce gdzie użytkownik wpisuje treść zadania
+let todoInput // miejsce gdzie użytkownik wpisuje treść zadania
 let errorInfo // info o braku zadań
 let addBtn // przycisk ADD dodaje nowe elementy do listy
-let ulLIst //list zadań, tagi UL
+let ulLIst // lista zadań, tagi UL
 let newTodo // nowo dodany LI, nowe zadanie
-let popup //popup
+let popup // popup
 let popupInfo //tekst w popupie jak się doda pusty tekst
 let todoToEdit // edytowany todo
 let popupInput // input w popupie
@@ -25,13 +25,14 @@ const prepareDOMElements = () => {
 	popupInput = document.querySelector('.popup-input')
 	popupAddBtn = document.querySelector('.accept')
 	popupCloseBtn = document.querySelector('.cancel')
+	deleteBtn = document.querySelector('.delete')
 }
 const prepareDOMEvents = () => {
 	addBtn.addEventListener('click', addNewTodo)
 	ulLIst.addEventListener('click', checkClick)
 	popupCloseBtn.addEventListener('click', closePopup)
 	popupAddBtn.addEventListener('click', changeTodoText)
-
+	todoInput.addEventListener('keyup', enterKeyCheck)
 }
 
 const addNewTodo = () => {
@@ -70,16 +71,15 @@ const checkClick = e => {
 	} else if (e.target.matches('.edit')) {
 		editTodo(e)
 	} else if (e.target.matches('.delete')) {
-		
+		deleteTodo(e)
 	}
 }
-const editTodo = (e) => {
+const editTodo = e => {
 	todoToEdit = e.target.closest('li')
 	popupInput.value = todoToEdit.firstChild.textContent
 	popup.classList.toggle('show-popup')
 }
 const closePopup = () => {
-	
 	popup.classList.toggle('show-popup')
 	popupInfo.textContent = ''
 }
@@ -88,12 +88,23 @@ const changeTodoText = () => {
 		todoToEdit.firstChild.textContent = popupInput.value
 		popup.classList.toggle('show-popup')
 		popupInfo.textContent = ''
-	}
-	else {
+	} else {
 		popupInfo.textContent = 'Musisz podać jakąś treść!'
 	}
-	
 }
 
+const deleteTodo = e => {
+	e.target.closest('li').remove()
+	const allTodos = ulLIst.querySelectorAll('.li')
+	if (allTodos.length === 0) {
+		errorInfo.textContent = 'Brak zadań na liście.'
+	}
+}
+
+const enterKeyCheck = e => {
+	if (e.key === 'Enter') {
+		addNewTodo()
+	}
+}
 
 document.addEventListener('DOMContentLoaded', main)
